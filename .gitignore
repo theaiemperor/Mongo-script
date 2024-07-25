@@ -1,0 +1,13 @@
+# misc
+.DS_Store
+*.pem
+
+
+# IDE's
+.vscode
+.idea
+
+
+
+# local env files
+.env*.local

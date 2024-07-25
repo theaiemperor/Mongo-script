@@ -1,0 +1,79 @@
+
+id=$(pgrep 'mongo')
+db="/usr/local/var/mongodb"
+lg="usr/local/var/log/mongodb/mongo.log"
+
+
+
+if [ "$1" == "start" -a "$id" == "" ]; then
+    echo "
+    Starting the mongoDb. 
+    "
+	mongod --dbpath $db --logpath $lg --fork
+
+
+elif [ "$1" == "start" -a "$id" != "" ]; then
+    echo "
+    MongoDb is already running. 
+    "
+
+
+elif [ "$1" == "check" -a "$id" == "" ]; then
+	echo "
+	MongoDb is not running.
+	"
+
+
+elif [ "$1" == "check" -a "$id" != "" ]; then
+	echo "
+	MongoDb is running with PID : $id 
+	"
+
+
+elif [ "$1" == "stop"  ]; then
+    pgrep mongo | xargs kill
+    echo 'Ok.'
+
+elif [ "$1" == "db" ]; then
+	echo "
+	Database directory : $db 
+	"
+
+elif [ "$1" == "log" ]; then
+	echo "
+	Log directory : $lg 
+	"
+
+elif [ "$1" == 'status' -a "$id" != '' ]; then
+
+	echo "
+        Mongod is running...
+        PID                \t: $id
+        PPId               \t: $(ps -o ppid= -p $id)
+        User               \t: $(ps -o user= -p $id)
+        Cpu usages         \t: $(ps -o %cpu= -p $id) %
+        Memory usages      \t: $(ps -o %mem= -p $id) %
+        Elapsed time       \t: $(ps -o etime= -p $id)
+        Start time         \t: $(ps -o start= -p $id)
+        Database directory \t: $db
+        Logs direcotry     \t: $lg
+
+	"
+
+elif [ "$1" == 'status' -a "$id" == '' ]; then
+	echo "
+	MongoDB is not running.
+	"
+
+
+else
+    echo "
+	    Options:
+	       start : Start MongoDB
+	       stop  : Stop MongoDB
+	       check : Check if MongoDB is running or not
+	       log   : Show log directory
+	       db    : Show database directory
+	       status: Show all info
+    "
+fi
